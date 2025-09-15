@@ -1,11 +1,11 @@
 (library
  (name workshop)
  (public_name fehu.example.sokoban.workshop)
- (modules slide1 slide2 slide3 slide4 slide5 slide6 slide7 slide8 slide9 slide10 slide11 helpers verified backoff_tabular visualizations)
+ (modules slide1 slide2 slide3 slide4 slide4_batched slide5 slide6 slide7 slide8 slide9 slide10 slide11 helpers verified backoff_tabular visualizations exercise1_solution)
  (libraries fehu rune kaun sokoban unix))
 
 (executables
- (names run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots)
+ (names run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots test_batched run4_batched)
  (libraries fehu rune kaun sokoban unix workshop)
- (modules run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots)
+ (modules run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots test_batched run4_batched)
  (modes exe))
