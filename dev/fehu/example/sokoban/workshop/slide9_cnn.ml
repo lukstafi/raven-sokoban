@@ -24,7 +24,8 @@ let train_reinforce_plus_plus_cnn env n_episodes learning_rate gamma epsilon bet
     let episode_data = collect_episode_cnn env policy_net policy_params 100 in
 
     (* Store selected episodes *)
-    if episode mod (n_episodes / 10) = 0 || episode = n_episodes then
+    let store_freq = max 1 (n_episodes / 10) in
+    if episode mod store_freq = 0 || episode = n_episodes then
       collected_episodes := episode_data :: !collected_episodes;
 
     let returns = compute_returns episode_data.rewards gamma in

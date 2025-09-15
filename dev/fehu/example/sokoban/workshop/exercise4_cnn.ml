@@ -101,7 +101,7 @@ let prepare_batch_for_cnn states =
     let w = if Array.length first_shape > 1 then first_shape.(1) else h in
     (* Stack and add channel: [batch_size, 1, H, W] *)
     let states_with_channel = Array.map (fun s ->
-      Rune.reshape [|1; 1; h; w|] s
+      Rune.reshape [|1; h; w|] s  (* Just add channel dimension, not batch *)
     ) states in
     Rune.stack ~axis:0 (Array.to_list states_with_channel)
 
@@ -117,10 +117,10 @@ let prepare_states_batch_cnn states_array =
     let w = if Array.length first_shape > 1 then first_shape.(1) else h in
     let states_list = Array.to_list states_array in
     let states_with_channel = List.map (fun s ->
-      (* Each state is [H, W], reshape to [1, 1, H, W] *)
-      Rune.reshape [|1; 1; h; w|] s
+      (* Each state is [H, W], reshape to [1, H, W] for channel dimension *)
+      Rune.reshape [|1; h; w|] s
     ) states_list in
-    (* Concatenate along batch dimension *)
+    (* Stack along batch dimension to get [batch_size, 1, H, W] *)
     Rune.stack ~axis:0 states_with_channel
 
 (* Collect episode with CNN-ready states *)
