@@ -28,6 +28,18 @@ let moving_average data window_size =
   done;
   smoothed
 
+(* Compute cumulative maximum *)
+let cumulative_max data =
+  let n = Array.length data in
+  let max_data = Array.make n 0.0 in
+  if n > 0 then begin
+    max_data.(0) <- data.(0);
+    for i = 1 to n - 1 do
+      max_data.(i) <- max max_data.(i-1) data.(i)
+    done
+  end;
+  max_data
+
 (* Generate SVG plot *)
 let generate_svg_plot histories metric_name output_file =
   let width = 800 in
@@ -40,6 +52,7 @@ let generate_svg_plot histories metric_name output_file =
   let get_data h = match metric_name with
     | "returns" -> moving_average h.returns 10
     | "losses" -> moving_average h.losses 10
+    | "max_returns" -> cumulative_max h.returns
     | _ -> failwith "Unknown metric"
   in
 
@@ -71,15 +84,22 @@ let generate_svg_plot histories metric_name output_file =
     margin margin margin (height - margin);  (* Y-axis *)
 
   (* Title *)
-  let title = String.capitalize_ascii metric_name ^ " per Episode" in
+  let title = match metric_name with
+    | "max_returns" -> "Maximum Returns up to Episode"
+    | _ -> String.capitalize_ascii metric_name ^ " per Episode"
+  in
   Printf.fprintf oc "  <text x=\"%d\" y=\"30\" text-anchor=\"middle\" font-size=\"20\" font-weight=\"bold\">%s</text>\n"
     (width / 2) title;
 
   (* Axis labels *)
   Printf.fprintf oc "  <text x=\"%d\" y=\"%d\" text-anchor=\"middle\" font-size=\"14\">Episode</text>\n"
     (width / 2) (height - 10);
+  let y_label = match metric_name with
+    | "max_returns" -> "Max Return"
+    | _ -> String.capitalize_ascii metric_name
+  in
   Printf.fprintf oc "  <text x=\"15\" y=\"%d\" text-anchor=\"middle\" font-size=\"14\" transform=\"rotate(-90 15 %d)\">%s</text>\n"
-    (height / 2) (height / 2) (String.capitalize_ascii metric_name);
+    (height / 2) (height / 2) y_label;
 
   (* Axis tick labels *)
   for i = 0 to 4 do
@@ -132,12 +152,16 @@ let ascii_plot histories metric_name window_size =
   let get_data h = match metric_name with
     | "returns" -> h.returns
     | "losses" -> h.losses
+    | "max_returns" -> cumulative_max h.returns
     | _ -> failwith "Unknown metric"
   in
 
   (* Find global min/max across all histories *)
   let all_values = List.concat_map (fun h ->
-    Array.to_list (moving_average (get_data h) window_size)
+    let data = get_data h in
+    let processed = if metric_name = "max_returns" then data
+                    else moving_average data window_size in
+    Array.to_list processed
   ) histories in
   let min_val = List.fold_left min max_float all_values in
   let max_val = List.fold_left max min_float all_values in
@@ -148,7 +172,9 @@ let ascii_plot histories metric_name window_size =
 
   (* Plot each history *)
   List.iteri (fun hist_idx h ->
-    let data = moving_average (get_data h) window_size in
+    let raw_data = get_data h in
+    let data = if metric_name = "max_returns" then raw_data
+               else moving_average raw_data window_size in
     let n_episodes = Array.length data in
     let char = match hist_idx with
       | 0 -> '*'
@@ -169,8 +195,12 @@ let ascii_plot histories metric_name window_size =
   ) histories;
 
   (* Print plot *)
-  Printf.printf "\n=== %s (smoothed with window=%d) ===\n"
-    (String.capitalize_ascii metric_name) window_size;
+  let title_str = match metric_name with
+    | "max_returns" -> "Maximum Returns up to Episode"
+    | _ -> Printf.sprintf "%s (smoothed with window=%d)"
+           (String.capitalize_ascii metric_name) window_size
+  in
+  Printf.printf "\n=== %s ===\n" title_str;
   Printf.printf "Max: %.2f\n" max_val;
 
   (* Print plot grid *)
@@ -408,11 +438,13 @@ let () =
   ascii_plot histories "returns" 10;
   print_endline "\nNote: Actor-Critic shows value network loss, Backoff-Tabular shows TD errors, others show policy loss";
   ascii_plot histories "losses" 10;
+  ascii_plot histories "max_returns" 1;  (* No smoothing for max returns *)
 
   (* SVG plots for files *)
   print_endline "\nGenerating SVG plots...";
   generate_svg_plot histories "returns" "reinforce_returns.svg";
   generate_svg_plot histories "losses" "reinforce_losses.svg";
+  generate_svg_plot histories "max_returns" "reinforce_max_returns.svg";
 
   (* Visualize collected episodes *)
   print_endline "\n=== Visualizing Episodes ===";
