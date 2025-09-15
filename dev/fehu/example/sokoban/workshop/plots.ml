@@ -431,7 +431,7 @@ let () =
         histories := {
           name = "REINFORCE (CNN)";
           returns = history.returns;
-          losses = history.actor_losses;
+          losses = history.losses;
           color = "#17becf"  (* Cyan *)
         } :: !histories
 
@@ -445,7 +445,7 @@ let () =
         histories := {
           name = "Actor-Critic (CNN)";
           returns = history.returns;
-          losses = history.critic_losses;  (* Use critic losses for consistency *)
+          losses = history.losses;  (* Uses the standard losses field *)
           color = "#bcbd22"  (* Yellow-green *)
         } :: !histories
 
@@ -459,7 +459,7 @@ let () =
         histories := {
           name = "PPO (CNN)";
           returns = history.returns;
-          losses = history.actor_losses;
+          losses = history.losses;
           color = "#e377c2"  (* Pink *)
         } :: !histories
 

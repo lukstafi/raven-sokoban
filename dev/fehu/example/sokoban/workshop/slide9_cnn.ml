@@ -2,7 +2,6 @@
 CNN-based PPO (Proximal Policy Optimization) implementation
 Uses convolutional neural networks for improved spatial understanding
 *)
-open Slide2
 open Slide3  (* For compute_returns *)
 open Slide4  (* For training_history type *)
 open Exercise4_cnn

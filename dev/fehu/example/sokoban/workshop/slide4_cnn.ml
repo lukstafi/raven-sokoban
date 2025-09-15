@@ -2,17 +2,9 @@
 CNN-based REINFORCE implementation
 Uses convolutional neural networks for the policy
 *)
-open Slide2
 open Slide3  (* For compute_returns *)
+open Slide4  (* For training_history type *)
 open Exercise4_cnn
-
-(* Training history type *)
-type training_history = {
-  returns : float array;
-  actor_losses : float array;
-  critic_losses : float array;  (* Not used in REINFORCE but kept for compatibility *)
-  collected_episodes : episode_data list;
-}
 
 let train_reinforce_cnn env n_episodes learning_rate gamma ?(grid_size=5) () =
   (* Initialize CNN policy network *)
@@ -91,11 +83,10 @@ let train_reinforce_cnn env n_episodes learning_rate gamma ?(grid_size=5) () =
     end
   done;
 
-  (* Return training history *)
+  (* Return training history compatible with Slide4.training_history *)
   {
     returns = history_returns;
-    actor_losses = history_actor_losses;
-    critic_losses = history_critic_losses;
+    losses = history_actor_losses;  (* Use actor losses as the main loss metric *)
     collected_episodes = List.rev !collected_episodes;
   }
 

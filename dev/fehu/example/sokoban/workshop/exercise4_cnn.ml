@@ -13,6 +13,7 @@ let create_cnn_policy_network num_actions =
     (* Input shape: [batch, 1, 5, 5] - single channel for grid values *)
 
     (* First conv layer: detect basic patterns *)
+    (* Note: Kaun conv2d appears to maintain spatial dimensions by default *)
     Kaun.Layer.conv2d ~in_channels:1 ~out_channels:16
                       ~kernel_size:(3, 3) ();
     Kaun.Layer.relu ();
@@ -24,8 +25,8 @@ let create_cnn_policy_network num_actions =
 
     (* Global pooling or flatten for final layers *)
     Kaun.Layer.flatten ();
-    (* Output size after 5×5 → 3×3 → 1×1: 32 * 1 * 1 = 32 *)
-    Kaun.Layer.linear ~in_features:32 ~out_features:64 ();
+    (* Output size with maintained dimensions: 32 * 5 * 5 = 800 *)
+    Kaun.Layer.linear ~in_features:800 ~out_features:64 ();
     Kaun.Layer.relu ();
 
     (* Output layer for actions *)
@@ -47,8 +48,8 @@ let create_cnn_value_network () =
     (* Flatten instead of pooling for small feature maps *)
     Kaun.Layer.flatten ();
 
-    (* Small FC layer for value estimation *)
-    Kaun.Layer.linear ~in_features:32 ~out_features:16 ();
+    (* Small FC layer for value estimation - 32*5*5 = 800 *)
+    Kaun.Layer.linear ~in_features:800 ~out_features:16 ();
     Kaun.Layer.relu ();
     Kaun.Layer.linear ~in_features:16 ~out_features:1 ();
   ]
@@ -108,7 +109,7 @@ let prepare_states_batch_cnn states_array =
 (* Collect episode with CNN-ready states *)
 let collect_episode_cnn env policy_net policy_params max_steps =
   let device = Rune.c in
-  let state = env#reset () in
+  let state, _ = env.Fehu.Env.reset () in
 
   let states = Array.make (max_steps + 1) (Rune.zeros device Rune.float32 [|5; 5|]) in
   let actions = Array.make max_steps (Rune.zeros device Rune.float32 [||]) in
@@ -149,14 +150,14 @@ let collect_episode_cnn env policy_net policy_params max_steps =
       let action_log_prob = Rune.scalar device Rune.float32 log_probs_array.(!action_int) in
 
       (* Step environment *)
-      let next_state, reward, is_done = env#step action in
+      let next_state, reward, terminated, truncated, _ = env.Fehu.Env.step action in
 
       actions.(t) <- action;
       rewards.(t) <- reward;
       log_probs.(t) <- action_log_prob;
       states.(t + 1) <- next_state;
 
-      if is_done then t + 1
+      if terminated || truncated then t + 1
       else loop (t + 1)
   in
 
@@ -218,8 +219,8 @@ let create_resnet_policy_network num_actions =
     (* Flatten for final layers *)
     Kaun.Layer.flatten ();
 
-    (* Final layers *)
-    Kaun.Layer.linear ~in_features:32 ~out_features:64 ();
+    (* Final layers - 32*5*5 = 800 *)
+    Kaun.Layer.linear ~in_features:800 ~out_features:64 ();
     Kaun.Layer.relu ();
     Kaun.Layer.linear ~in_features:64 ~out_features:num_actions ();
   ]

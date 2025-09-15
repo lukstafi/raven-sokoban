@@ -2,7 +2,6 @@
 CNN-based A2C (Advantage Actor-Critic) implementation
 Uses convolutional neural networks for both policy and value functions
 *)
-open Slide2
 open Slide3  (* For compute_returns *)
 open Slide4  (* For training_history type *)
 open Exercise4_cnn

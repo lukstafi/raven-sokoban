@@ -2,7 +2,7 @@
 Test and compare CNN-based networks vs fully-connected networks
 *)
 
-open Slide2
+open Workshop
 open Exercise4_cnn
 
 (* Test CNN shapes *)
@@ -16,7 +16,7 @@ let compare_algorithms () =
   Printf.printf "Comparing CNN vs FC networks on Sokoban...\n\n";
 
   (* Create environment *)
-  let env = new sokoban_environment ~grid_size:5 () in
+  let env = Slide1.create_simple_gridworld 5 in
 
   (* Training parameters *)
   let n_episodes = 100 in
@@ -24,7 +24,8 @@ let compare_algorithms () =
   let gamma = 0.99 in
 
   Printf.printf "Training REINFORCE with FC network...\n";
-  let fc_history = Slide4_batched.train_reinforce env n_episodes learning_rate gamma () in
+  let _policy_net, _params, _episodes, fc_history =
+    Slide4_batched.train_reinforce env n_episodes learning_rate gamma () in
 
   Printf.printf "Training REINFORCE with CNN network...\n";
   let cnn_history = Slide4_cnn.train_reinforce_cnn env n_episodes learning_rate gamma () in
@@ -81,7 +82,7 @@ let compare_algorithms () =
 let test_a2c_cnn () =
   Printf.printf "\nTesting A2C with CNN networks...\n";
 
-  let env = new sokoban_environment ~grid_size:5 () in
+  let env = Slide1.create_simple_gridworld 5 in
   let n_episodes = 50 in
   let lr_actor = 0.001 in
   let lr_critic = 0.003 in
@@ -103,7 +104,7 @@ let test_a2c_cnn () =
 let test_ppo_cnn () =
   Printf.printf "\nTesting PPO with CNN networks...\n";
 
-  let env = new sokoban_environment ~grid_size:5 () in
+  let env = Slide1.create_simple_gridworld 5 in
   let n_episodes = 50 in
   let learning_rate = 0.001 in
   let gamma = 0.99 in
