@@ -423,6 +423,46 @@ let () =
           color = "#9467bd"  (* Purple *)
         } :: !histories
 
+    | "reinforce-cnn" ->
+        algo_ref := "reinforce-cnn";
+        print_endline "Training REINFORCE with CNN...";
+        let history = Slide4_cnn.train_reinforce_cnn env n_episodes learning_rate gamma ~grid_size:effective_grid_size () in
+        full_histories := ("reinforce-cnn", history) :: !full_histories;
+        histories := {
+          name = "REINFORCE (CNN)";
+          returns = history.returns;
+          losses = history.actor_losses;
+          color = "#17becf"  (* Cyan *)
+        } :: !histories
+
+    | "actor-critic-cnn" ->
+        algo_ref := "actor-critic-cnn";
+        print_endline "Training Actor-Critic with CNN...";
+        let lr_actor = learning_rate in
+        let lr_critic = learning_rate *. 3.0 in
+        let history = Slide6_cnn.train_actor_critic_cnn env n_episodes lr_actor lr_critic gamma ~grid_size:effective_grid_size () in
+        full_histories := ("actor-critic-cnn", history) :: !full_histories;
+        histories := {
+          name = "Actor-Critic (CNN)";
+          returns = history.returns;
+          losses = history.critic_losses;  (* Use critic losses for consistency *)
+          color = "#bcbd22"  (* Yellow-green *)
+        } :: !histories
+
+    | "ppo-cnn" ->
+        algo_ref := "ppo-cnn";
+        print_endline "Training PPO with CNN...";
+        let epsilon = 0.2 in
+        let beta = 0.01 in
+        let history = Slide9_cnn.train_reinforce_plus_plus_cnn env n_episodes learning_rate gamma epsilon beta ~grid_size:effective_grid_size () in
+        full_histories := ("ppo-cnn", history) :: !full_histories;
+        histories := {
+          name = "PPO (CNN)";
+          returns = history.returns;
+          losses = history.actor_losses;
+          color = "#e377c2"  (* Pink *)
+        } :: !histories
+
     | unknown ->
         Printf.eprintf "Warning: Unknown algorithm '%s', skipping\n" unknown
   ) algorithms;
