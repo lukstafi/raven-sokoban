@@ -4,8 +4,9 @@ to avoid indexing issues during autodiff
 *)
 open Slide2
 open Slide3
+open Slide4  (* For training_history type *)
 
-let train_reinforce_batched env n_episodes learning_rate gamma ?(grid_size=5) () =
+let train_reinforce env n_episodes learning_rate gamma ?(grid_size=5) () =
   (* Initialize policy *)
   let policy_net, params = initialize_policy ~grid_size () in
   let device = Rune.c in
@@ -122,5 +123,8 @@ let train_reinforce_batched env n_episodes learning_rate gamma ?(grid_size=5) ()
         episode total_return (Rune.item [] loss) n_actions
   done;
 
-  (* Return collected data for visualization *)
-  (List.rev !collected_episodes, history_returns, history_losses)
+  (* Return in the expected format *)
+  (policy_net, params, List.rev !collected_episodes,
+   { returns = history_returns;
+     losses = history_losses;
+     collected_episodes = List.rev !collected_episodes })

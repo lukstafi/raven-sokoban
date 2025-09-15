@@ -4,9 +4,10 @@ Processes all states in episodes using batched operations
 *)
 open Slide2
 open Slide3
+open Slide4  (* For training_history type *)
 open Slide6
 
-let train_a2c_batched env n_episodes lr_actor lr_critic gamma ?(grid_size=5) () =
+let train_actor_critic env n_episodes lr_actor lr_critic gamma ?(grid_size=5) () =
   (* Initialize networks *)
   let policy_net, policy_params = initialize_policy ~grid_size () in
   let value_net = create_value_network grid_size in
@@ -121,7 +122,8 @@ let train_a2c_batched env n_episodes lr_actor lr_critic gamma ?(grid_size=5) () 
     end
   done;
 
-  (* Return results *)
+  (* Return results in expected format *)
   (policy_net, policy_params, value_net, value_params,
-   List.rev !collected_episodes, history_returns,
-   history_actor_losses, history_critic_losses)
+   { returns = history_returns;
+     losses = history_actor_losses;  (* Use actor losses as main losses *)
+     collected_episodes = List.rev !collected_episodes })

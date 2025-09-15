@@ -325,9 +325,9 @@ let () =
     match algo with
     | "reinforce" ->
         algo_ref := "reinforce";
-        print_endline "Training REINFORCE without baseline...";
+        print_endline "Training REINFORCE without baseline (batched)...";
         let _policy_net, _params, _episodes, history =
-          Slide4.train_reinforce env n_episodes learning_rate gamma ~grid_size:effective_grid_size () in
+          Slide4_batched.train_reinforce env n_episodes learning_rate gamma ~grid_size:effective_grid_size () in
         full_histories := ("reinforce", history) :: !full_histories;
         histories := {
           name = "REINFORCE (no baseline)";
@@ -351,11 +351,11 @@ let () =
 
     | "actor-critic" ->
         algo_ref := "actor-critic";
-        print_endline "Training Actor-Critic...";
+        print_endline "Training Actor-Critic (batched)...";
         (* Actor-Critic uses different learning rates for actor and critic *)
         let lr_critic = learning_rate *. 0.5 in  (* Critic often trains slower *)
         let _policy_net, _policy_params, _value_net, _value_params, history =
-          Slide6.train_actor_critic env n_episodes learning_rate lr_critic gamma ~grid_size:effective_grid_size () in
+          Slide6_batched.train_actor_critic env n_episodes learning_rate lr_critic gamma ~grid_size:effective_grid_size () in
         full_histories := ("actor-critic", history) :: !full_histories;
         histories := {
           name = "Actor-Critic";
@@ -366,12 +366,12 @@ let () =
 
     | "reinforce++" ->
         algo_ref := "reinforce++";
-        print_endline "Training REINFORCE++...";
+        print_endline "Training REINFORCE++ (batched PPO)...";
         (* REINFORCE++ with clipping and KL penalty *)
         let epsilon = 0.2 in  (* Clipping parameter *)
         let beta = 0.01 in    (* KL penalty coefficient *)
         let _policy_net, _params, history =
-          Slide9.train_reinforce_plus_plus env n_episodes learning_rate gamma epsilon beta ~grid_size:effective_grid_size () in
+          Slide9_batched.train_reinforce_plus_plus env n_episodes learning_rate gamma epsilon beta ~grid_size:effective_grid_size () in
         full_histories := ("reinforce++", history) :: !full_histories;
         histories := {
           name = "REINFORCE++";

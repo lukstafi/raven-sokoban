@@ -4,9 +4,11 @@ Processes all states in episodes using batched operations
 *)
 open Slide2
 open Slide3
+open Slide4  (* For training_history type *)
 
-let train_ppo_batched env n_episodes learning_rate ?(epsilon=0.2) ?(beta=0.01)
-    ?(baseline_alpha=0.95) ?(ppo_epochs=4) ?(grid_size=5) () =
+let train_reinforce_plus_plus env n_episodes learning_rate gamma epsilon beta ?(grid_size=5) () =
+  let baseline_alpha = 0.95 in
+  let ppo_epochs = 4 in
   (* Initialize policy *)
   let policy_net, params = initialize_policy ~grid_size () in
   let device = Rune.c in
@@ -36,7 +38,7 @@ let train_ppo_batched env n_episodes learning_rate ?(epsilon=0.2) ?(beta=0.01)
       collected_episodes := episode_data :: !collected_episodes;
 
     (* Compute returns *)
-    let returns = compute_returns episode_data.rewards 0.99 in
+    let returns = compute_returns episode_data.rewards gamma in
     let n_actions = Array.length episode_data.actions in
 
     if n_actions > 0 then begin
@@ -165,6 +167,8 @@ let train_ppo_batched env n_episodes learning_rate ?(epsilon=0.2) ?(beta=0.01)
     end
   done;
 
-  (* Return results *)
-  (policy_net, params, List.rev !collected_episodes,
-   history_returns, history_losses, history_kl)
+  (* Return results in expected format *)
+  (policy_net, params,
+   { returns = history_returns;
+     losses = history_losses;
+     collected_episodes = List.rev !collected_episodes })
