@@ -5,7 +5,7 @@
  (libraries fehu rune kaun sokoban unix))
 
 (executables
- (names run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots test_batched run4_batched test_a2c_batched test_ppo_batched test_cnn_comparison)
+ (names run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots test_batched run4_batched test_a2c_batched test_ppo_batched test_cnn_comparison test_conv2d_debug test_cnn_network_debug test_cnn_init_debug)
  (libraries fehu rune kaun sokoban unix workshop)
- (modules run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots test_batched run4_batched test_a2c_batched test_ppo_batched test_cnn_comparison)
+ (modules run1 run2 run3 run4 run5 run6 run7 run8 run9 run10 run11 plots test_batched run4_batched test_a2c_batched test_ppo_batched test_cnn_comparison test_conv2d_debug test_cnn_network_debug test_cnn_init_debug)
  (modes exe))
