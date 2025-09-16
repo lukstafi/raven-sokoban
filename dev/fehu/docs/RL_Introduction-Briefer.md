@@ -12,7 +12,7 @@ Welcome to reinforcement learning!
 2. **Part B:** Sokoban, curriculum learning, representation engineering for agents and environments
 
 {.unrevealed #claude-disclaimer}
-**Disclaimer: Created with, and almost exclusively by, Claude**
+**Created with, and almost exclusively by, Claude**
 
 {.unrevealed #code-disclaimer}
 **Apologies for excessive comments and code duplication**
