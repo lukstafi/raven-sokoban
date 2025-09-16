@@ -11,10 +11,20 @@ Welcome to reinforcement learning!
 1. **Part A:** on-policy algorithms
 2. **Part B:** Sokoban, curriculum learning, representation engineering for agents and environments
 
+{.unrevealed #claude-disclaimer}
+**Disclaimer: Created with, and almost exclusively by, Claude**
+
+{.unrevealed #code-disclaimer}
+**Apologies for excessive comments and code duplication**
+
 ## What is Reinforcement Learning? {#rl-definition}
 
 {.definition title="Reinforcement Learning"}
 Instead of learning from labeled examples, an **agent** learns by **acting** in an **environment** and receiving **rewards**.
+
+{pause reveal=claude-disclaimer}
+
+{pause reveal=code-disclaimer}
 
 {pause center #rl-framework}
 ### The RL Framework
@@ -387,7 +397,7 @@ The baseline **neural network** is learned to predict expected returns, reducing
 {pause up .block title="Solve Exercise 1 Part B"}
 > {slip include src=../example/sokoban/workshop/exercise1.md}
 
-{pause center .block title="Advance to solved if needed"}
+{pause center .block title="Advance to solved"}
 1. `gh repo clone lukstafi/raven-sokoban raven-workshop-stage2 -- --branch feat/sokoban-exercise1-solution`
 2. `cd ../raven-workshop-stage2`
 3. Play with `plots.exe`
@@ -684,6 +694,11 @@ Compare the badly-designed environment `curriculum` (code: `slide10.ml`) and the
 {pause}
 {slip include src=../example/sokoban/workshop/exercise4.md}
 
+{pause center .block title="Advance to solved"}
+1. `gh repo clone lukstafi/raven-sokoban raven-workshop-stage3 -- --branch feat/sokoban-exercise4-solution`
+2. `cd ../raven-workshop-stage3`
+3. Run `test_cnn_comparison.exe`
+3. Play with `plots.exe`
 
 ***
 

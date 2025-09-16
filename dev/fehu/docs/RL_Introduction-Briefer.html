@@ -1816,8 +1816,12 @@ relevance:0},{begin:/-&gt;/}]})})();hljs.registerLanguage(&quot;ocaml&quot;,e)})
 &lt;li&gt;&lt;strong&gt;&lt;span&gt;Part A:&lt;/span&gt;&lt;/strong&gt;&lt;span&gt; on-policy algorithms&lt;/span&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;span&gt;Part B:&lt;/span&gt;&lt;/strong&gt;&lt;span&gt; Sokoban, curriculum learning, representation engineering for agents and environments&lt;/span&gt;&lt;/li&gt;
 &lt;/ol&gt;
+&lt;p id=&quot;claude-disclaimer&quot; class=&quot;unrevealed&quot;&gt;&lt;strong&gt;&lt;span&gt;Disclaimer: Created with, and almost exclusively by, Claude&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p id=&quot;code-disclaimer&quot; class=&quot;unrevealed&quot;&gt;&lt;strong&gt;&lt;span&gt;Apologies for excessive comments and code duplication&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&quot;what-is-reinforcement-learning&quot;&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#what-is-reinforcement-learning&quot;&gt;&lt;/a&gt;&lt;span&gt;What is Reinforcement Learning? &lt;/span&gt;&lt;span id=&quot;rl-definition&quot;&gt;&lt;/span&gt;&lt;/h2&gt;
 &lt;p class=&quot;definition&quot; title=&quot;Reinforcement Learning&quot;&gt;&lt;span&gt;Instead of learning from labeled examples, an &lt;/span&gt;&lt;strong&gt;&lt;span&gt;agent&lt;/span&gt;&lt;/strong&gt;&lt;span&gt; learns by &lt;/span&gt;&lt;strong&gt;&lt;span&gt;acting&lt;/span&gt;&lt;/strong&gt;&lt;span&gt; in an &lt;/span&gt;&lt;strong&gt;&lt;span&gt;environment&lt;/span&gt;&lt;/strong&gt;&lt;span&gt; and receiving &lt;/span&gt;&lt;strong&gt;&lt;span&gt;rewards&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;div reveal-at-unpause=claude-disclaimer pause&gt;&lt;/div&gt;
+&lt;div reveal-at-unpause=code-disclaimer pause&gt;&lt;/div&gt;
 &lt;h3 id=&quot;rl-framework&quot; center-at-unpause pause&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#rl-framework&quot;&gt;&lt;/a&gt;&lt;span&gt;The RL Framework&lt;/span&gt;&lt;/h3&gt;
 &lt;div&gt;
 &lt;p&gt;&lt;strong&gt;&lt;span&gt;Agent&lt;/span&gt;&lt;/strong&gt;&lt;span&gt;: The learner (your neural network with weights θ)&lt;/span&gt;&lt;/p&gt;
@@ -3002,7 +3006,7 @@ let all_logits = Kaun.apply policy_net p ~training:true all_states in
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&quot;block&quot; title=&quot;Advance to solved if needed&quot; center-at-unpause pause&gt;
+&lt;div class=&quot;block&quot; title=&quot;Advance to solved&quot; center-at-unpause pause&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;code&gt;gh repo clone lukstafi/raven-sokoban raven-workshop-stage2 -- --branch feat/sokoban-exercise1-solution&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;cd ../raven-workshop-stage2&lt;/code&gt;&lt;/li&gt;
@@ -3432,6 +3436,14 @@ let prepare_batch_for_cnn states =
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;block&quot; title=&quot;Advance to solved&quot; center-at-unpause pause&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;gh repo clone lukstafi/raven-sokoban raven-workshop-stage3 -- --branch feat/sokoban-exercise4-solution&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cd ../raven-workshop-stage3&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span&gt;Run &lt;/span&gt;&lt;code&gt;test_cnn_comparison.exe&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span&gt;Play with &lt;/span&gt;&lt;code&gt;plots.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
 &lt;/div&gt;
 &lt;hr&gt;
 &lt;div down-at-unpause=fin pause&gt;&lt;/div&gt;
