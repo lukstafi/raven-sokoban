@@ -18,8 +18,6 @@ Slide6_cnn.train_actor_critic_cnn env n_episodes lr_actor lr_critic gamma ~grid_
 - Episode returns: states array of `[10, 10]` tensors
 
 ### 4. Batch Preparation (exercise4_cnn.ml:109-124)
-**Fixed Issue**: Was creating 5D tensors `[batch, 1, 1, H, W]`
-**Solution**: Now creates proper 4D tensors `[batch, 1, H, W]`
 
 ```ocaml
 prepare_states_batch_cnn: Array of [10, 10] → [batch_size, 1, 10, 10]
